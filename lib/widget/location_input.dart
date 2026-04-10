@@ -1,3 +1,4 @@
+import 'package:favorite_places/model/place.dart';
 import 'package:flutter/material.dart';
 import 'package:location/location.dart';
 
@@ -9,7 +10,7 @@ class LocationInput extends StatefulWidget {
 }
 
 class _LocationInputState extends State<LocationInput> {
-  Location? _pickedLocation;
+  PlaceLocation? _pickedLocation;
   var _isGettingLocation = false;
   void _getCurrentLocation() async {
     Location location = Location();
@@ -39,11 +40,18 @@ class _LocationInputState extends State<LocationInput> {
     });
 
     locationData = await location.getLocation();
+    if (locationData.latitude == null && locationData.longitude == null) {
+      return;
+    }
     setState(() {
+      _pickedLocation = PlaceLocation(
+        latitude: locationData.latitude!,
+        longitude: locationData.longitude!,
+      );
       _isGettingLocation = false;
     });
-    print(locationData.latitude);
-    print(locationData.longitude);
+    // print(locationData.latitude);
+    // print(locationData.longitude);//inorder to change this Numbers in to a readable location we need the google map api but we can't get it since it cost 200$ per month and we are not going to pay that much for this project so we will just show the lat and long in the preview container
   }
 
   @override
